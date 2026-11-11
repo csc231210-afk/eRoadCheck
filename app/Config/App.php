@@ -1,38 +1,38 @@
 <?php
 
-namespace App\Config;
+namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
 
 class App extends BaseConfig
 {
-    public string $baseURL = 'http://localhost/e-roadcheck/';
+    public string $baseURL = 'http://localhost/e-roadcheck/public/';
     public string $indexPage = '';
     public string $uriProtocol = 'REQUEST_URI';
     public string $defaultLocale = 'en';
-    public string $negotiateLocale = false;
+    public bool $negotiateLocale = false;
+    public array $supportedLocales = ['en'];
     public string $appTimezone = 'Africa/Lagos';
     public string $charset = 'UTF-8';
     public bool $forceGlobalSecureRequests = false;
-    public bool $sessionDriver = 'CodeIgniter\Session\Handlers\FileHandler';
-    public bool $cookiePrefix = '';
-    public bool $cookieDomain = '';
-    public bool $cookiePath = '/';
-    public bool $cookieSecure = false;
-    public int $cookieHTTPOnly = 1;
-    public int $cookieSameSite = 0;
+    public string $sessionDriver = 'CodeIgniter\\Session\\Handlers\\FileHandler';
     public string $sessionCookieName = 'eroadcheck_session';
     public int $sessionExpiration = 7200;
-    public bool $sessionSavePath = WRITEPATH . 'session';
+    public string $sessionSavePath = WRITEPATH . 'session';
     public bool $sessionMatchIP = false;
-    public bool $sessionTimeToUpdate = 300;
+    public int $sessionTimeToUpdate = 300;
     public bool $sessionRegenerateDestroy = true;
-    public string $CSRFTokenName = 'csrf';
+    public string $cookiePrefix = '';
+    public string $cookieDomain = '';
+    public string $cookiePath = '/';
+    public bool $cookieSecure = false;
+    public bool $cookieHTTPOnly = true;
+    public string $cookieSameSite = 'Lax';
+    public string $CSRFTokenName = 'csrf_test_name';
     public string $CSRFHeaderName = 'X-CSRF-TOKEN';
-    public string $CSRFCookieName = 'csrf_cookie';
-    public int $CSRFExpiration = 7200;
-    public bool $CSRFProtectAll = false;
+    public string $CSRFCookieName = 'csrf_cookie_name';
+    public int $CSRFExpire = 7200;
     public bool $CSRFRegenerate = true;
-    public bool $CSRFExcludeGlobal = false;
-    public string $allowedHostnames = '';
+    public bool $CSRFRedirect = false;
+    public string $CSPEnabled = false;
 }

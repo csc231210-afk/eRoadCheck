@@ -1,48 +1,54 @@
 <?php
 
-namespace App\Config;
+use CodeIgniter\Router\RouteCollection;
 
-use CodeIgniter\Config\Routes as BaseRoutes;
+/** @var RouteCollection $routes */
+$routes->setDefaultNamespace('App\\Controllers');
+$routes->setDefaultController('Home');
+$routes->setDefaultMethod('index');
+$routes->setTranslateURIDashes(false);
+$routes->set404直? (false);
+$routes->setAutoRoute(false);
 
-class Routes extends BaseRoutes
-{
-    public static function init() {
-        self::get('/', 'Home::index');
-        self::get('login', 'Auth\\LoginController::index');
-        self::post('login', 'Auth\\LoginController::login');
-        self::get('logout', 'Auth\\LogoutController::logout');
+$routes->get('/', 'Home::index');
+$routes->get('login', 'Auth\\LoginController::index');
+$routes->post('login', 'Auth\\LoginController::login');
+$routes->post('logout', 'Auth\\LogoutController::logout', ['filter' => 'auth']);
+$routes->get('logout', 'Auth\\LogoutController::logout', ['filter' => 'auth']);
+$routes->get('verify/(:segment)', 'Verification\\VerificationController::verify/$1');
+$routes->get('verify', 'Verification\\VerificationController::index');
 
-        self::get('admin/dashboard', 'Admin\\DashboardController::index', ['filter' => 'auth:admin']);
-        self::get('admin/users', 'Admin\\UsersController::index', ['filter' => 'auth:admin']);
-        self::get('admin/users/add', 'Admin\\UsersController::add', ['filter' => 'auth:admin']);
-        self::post('admin/users/save', 'Admin\\UsersController::save', ['filter' => 'auth:admin']);
-        self::get('admin/drivers', 'Admin\\DriversController::index', ['filter' => 'auth:admin']);
-        self::get('admin/drivers/add', 'Admin\\DriversController::add', ['filter' => 'auth:admin']);
-        self::post('admin/drivers/save', 'Admin\\DriversController::save', ['filter' => 'auth:admin']);
-        self::get('admin/licenses', 'Admin\\LicensesController::index', ['filter' => 'auth:admin']);
-        self::get('admin/licenses/add', 'Admin\\LicensesController::add', ['filter' => 'auth:admin']);
-        self::post('admin/licenses/save', 'Admin\\LicensesController::save', ['filter' => 'auth:admin']);
-        self::get('admin/vehicles', 'Admin\\VehiclesController::index', ['filter' => 'auth:admin']);
-        self::get('admin/vehicles/add', 'Admin\\VehiclesController::add', ['filter' => 'auth:admin']);
-        self::post('admin/vehicles/save', 'Admin\\VehiclesController::save', ['filter' => 'auth:admin']);
-        self::get('admin/documents', 'Admin\\DocumentsController::index', ['filter' => 'auth:admin']);
-        self::get('admin/documents/add', 'Admin\\DocumentsController::add', ['filter' => 'auth:admin']);
-        self::post('admin/documents/save', 'Admin\\DocumentsController::save', ['filter' => 'auth:admin']);
-        self::get('admin/revenue', 'Admin\\RevenueController::index', ['filter' => 'auth:admin']);
-        self::get('admin/revenue/add', 'Admin\\RevenueController::add', ['filter' => 'auth:admin']);
-        self::post('admin/revenue/save', 'Admin\\RevenueController::save', ['filter' => 'auth:admin']);
-        self::get('admin/qr-codes', 'Admin\\QrCodesController::index', ['filter' => 'auth:admin']);
-        self::get('admin/qr-codes/generate', 'Admin\\QrCodesController::generate', ['filter' => 'auth:admin']);
-        self::post('admin/qr-codes/save', 'Admin\\QrCodesController::save', ['filter' => 'auth:admin']);
+$routes->group('admin', ['filter' => 'auth:admin'], static function ($routes) {
+    $routes->get('dashboard', 'Admin\\DashboardController::index');
+    $routes->get('users', 'Admin\\UsersController::index');
+    $routes->match(['get', 'post'], 'users/add', 'Admin\\UsersController::add');
+    $routes->match(['get', 'post'], 'users/edit/(:num)', 'Admin\\UsersController::edit/$1');
+    $routes->get('drivers', 'Admin\\DriversController::index');
+    $routes->match(['get', 'post'], 'drivers/add', 'Admin\\DriversController::add');
+    $routes->match(['get', 'post'], 'drivers/edit/(:num)', 'Admin\\DriversController::edit/$1');
+    $routes->get('drivers/view/(:num)', 'Admin\\DriversController::view/$1');
+    $routes->get('licenses', 'Admin\\LicensesController::index');
+    $routes->match(['get', 'post'], 'licenses/add', 'Admin\\LicensesController::add');
+    $routes->match(['get', 'post'], 'licenses/edit/(:num)', 'Admin\\LicensesController::edit/$1');
+    $routes->get('vehicles', 'Admin\\VehiclesController::index');
+    $routes->match(['get', 'post'], 'vehicles/add', 'Admin\\VehiclesController::add');
+    $routes->match(['get', 'post'], 'vehicles/edit/(:num)', 'Admin\\VehiclesController::edit/$1');
+    $routes->get('vehicles/view/(:num)', 'Admin\\VehiclesController::view/$1');
+    $routes->get('documents', 'Admin\\DocumentsController::index');
+    $routes->match(['get', 'post'], 'documents/add', 'Admin\\DocumentsController::add');
+    $routes->match(['get', 'post'], 'documents/edit/(:num)', 'Admin\\DocumentsController::edit/$1');
+    $routes->get('revenue', 'Admin\\RevenueController::index');
+    $routes->match(['get', 'post'], 'revenue/add', 'Admin\\RevenueController::add');
+    $routes->match(['get', 'post'], 'revenue/edit/(:num)', 'Admin\\RevenueController::edit/$1');
+    $routes->get('qr-codes', 'Admin\\QrCodesController::index');
+    $routes->match(['get', 'post'], 'qr-codes/generate', 'Admin\\QrCodesController::generate');
+    $routes->get('qr-codes/download/(:num)', 'Admin\\QrCodesController::download/$1');
+    $routes->post('qr-codes/revoke/(:num)', 'Admin\\QrCodesController::revoke/$1');
+    $routes->get('verification-logs', 'Admin\\VerificationLogsController::index');
+});
 
-        self::get('officer/dashboard', 'Officer\\DashboardController::index', ['filter' => 'auth:officer']);
-        self::get('officer/scan', 'Officer\\ScannerController::index', ['filter' => 'auth:officer']);
-        self::post('officer/scan/submit', 'Officer\\ScannerController::submitScan', ['filter' => 'auth:officer']);
-        self::get('officer/history', 'Officer\\HistoryController::index', ['filter' => 'auth:officer']);
-
-        self::get('verify/(:alphanum)', 'Verification\\VerificationController::verify/$1');
-        self::get('verify', 'Verification\\VerificationController::index');
-
-        self::get('admin/verification-logs', 'Admin\\VerificationLogsController::index', ['filter' => 'auth:admin']);
-    }
-}
+$routes->group('officer', ['filter' => 'auth:officer'], static function ($routes) {
+    $routes->get('dashboard', 'Officer\\DashboardController::index');
+    $routes->get('scan', 'Officer\\ScannerController::index');
+    $routes->get('history', 'Officer\\HistoryController::index');
+});
