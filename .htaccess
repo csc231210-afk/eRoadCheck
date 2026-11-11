@@ -1,0 +1,17 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Protect project internals when the repository root is accidentally used as
+# Apache's document root. Recommended setup is DocumentRoot pointing at /public.
+<FilesMatch "^(\.env|composer\.(json|lock)|spark)$">
+    Require all denied
+</FilesMatch>
+<IfModule mod_rewrite.c>
+    RewriteRule ^(app|database|tests|vendor|writable)(/|$) - [F,L,NC]
+</IfModule>
