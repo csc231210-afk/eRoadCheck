@@ -1,0 +1,18 @@
+# Composer
+/vendor/
+
+# CI4 writable
+writable/cache/
+writable/logs/
+writable/session/
+
+# Local environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploads
+writable/uploads/**
+!writable/uploads/.gitkeep
